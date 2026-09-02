@@ -35,12 +35,12 @@ export class PurchasePage {
 
         this.nameOnCard = page.locator('#nameOnCard');
 
-        this.purchaseButton = page.getByRole('input', {
+        this.purchaseButton = page.getByRole('button', {
             name: 'Purchase Flight'
         });
     }
 
-    async fillPassengerDetails() {
+   async fillPassengerDetails() {
 
         await this.name.fill('Mohammad Ajij');
 
@@ -51,16 +51,23 @@ export class PurchasePage {
         await this.state.fill('Gujarat');
 
         await this.zipCode.fill('380001');
+    }
+
+    async fillPaymentDetails() {
 
         await this.cardType.selectOption('visa');
 
-        await this.creditCardNumber.fill('4111111111111111');
+        await this.creditCardNumber.fill(
+            '4111111111111111'
+        );
 
         await this.creditCardMonth.fill('12');
 
         await this.creditCardYear.fill('2030');
 
-        await this.nameOnCard.fill('Mohammad Ajij');
+        await this.nameOnCard.fill(
+            'Mohammad Ajij'
+        );
     }
 
     async purchaseFlight() {
