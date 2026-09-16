@@ -14,10 +14,15 @@ export class ConfirmationPage {
         );
     }
 
-    async verifyConfirmationMessage() {
+    async verifyThankYouMessage() {
 
         await this.thankYouMessage.waitFor({
             state: 'visible'
         });
+    }
+
+    async verifyConfirmationMessage() {
+
+        await this.verifyThankYouMessage();
     }
 }

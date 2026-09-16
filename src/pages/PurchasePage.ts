@@ -1,4 +1,5 @@
 import { Page, Locator } from '@playwright/test';
+import { PassengerData, PaymentData } from '../types/flightTypes';
 
 export class PurchasePage {
 
@@ -35,33 +36,47 @@ export class PurchasePage {
 
         this.nameOnCard = page.locator('#nameOnCard');
 
-        this.purchaseButton = page.getByRole('input', {
+        this.purchaseButton = page.getByRole('button', {
             name: 'Purchase Flight'
         });
     }
 
-    async fillPassengerDetails() {
+async fillPassengerDetails(data: PassengerData) {
 
-        await this.name.fill('Mohammad Ajij');
+    await this.name.fill(data.name);
 
-        await this.address.fill('Ahmedabad');
+    await this.address.fill(data.address);
 
-        await this.city.fill('Ahmedabad');
+    await this.city.fill(data.city);
 
-        await this.state.fill('Gujarat');
+    await this.state.fill(data.state);
 
-        await this.zipCode.fill('380001');
+    await this.zipCode.fill(data.zipCode);
 
-        await this.cardType.selectOption('visa');
+}
 
-        await this.creditCardNumber.fill('4111111111111111');
+async fillPaymentDetails(data: PaymentData) {
 
-        await this.creditCardMonth.fill('12');
+    await this.cardType.selectOption(
+        data.cardType
+    );
 
-        await this.creditCardYear.fill('2030');
+    await this.creditCardNumber.fill(
+        data.cardNumber
+    );
 
-        await this.nameOnCard.fill('Mohammad Ajij');
-    }
+    await this.creditCardMonth.fill(
+        data.cardMonth
+    );
+
+    await this.creditCardYear.fill(
+        data.cardYear
+    );
+
+    await this.nameOnCard.fill(
+        data.nameOnCard
+    );
+}
 
     async purchaseFlight() {
 

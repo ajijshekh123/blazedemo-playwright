@@ -1,67 +1,119 @@
-import { test, expect } from '@playwright/test';
+import {
+    test,
+    expect
+} from '../../src/fixtures/testFixtures';
 
-import { HomePage } from '../../src/pages/HomePage';
-import { ReservePage } from '../../src/pages/ReservePage';
-import { PurchasePage } from '../../src/pages/PurchasePage';
-import { ConfirmationPage } from '../../src/pages/ConfirmationPage';
+import {
+    flightData
+} from '../../src/test-data/flightData';
 
-import { flightData } from '../../src/test-data/flightData';
+test(
+    'E2E Flight Booking - Boston to London',
+    async ({
+        page,
+        homePage,
+        reservePage,
+        purchasePage,
+        confirmationPage
+    }) => {
 
-test('End-to-End Flight Booking', async ({ page }) => {
+        // ==========================================
+        // 1. Open Home Page
+        // ==========================================
 
-    const homePage = new HomePage(page);
-    const reservePage = new ReservePage(page);
-    const purchasePage = new PurchasePage(page);
-    const confirmationPage = new ConfirmationPage(page);
+        await homePage.open();
 
-    // 1. Open Home Page
 
-    await homePage.open();
+        // ==========================================
+        // 2. Select Flight
+        // ==========================================
 
-    // 2. Find Flight
+        await homePage.selectDepartureCity(
+            flightData.departureCity
+        );
 
-    await homePage.selectDepartureCity(
-        flightData.departureCity
-    );
+        await homePage.selectDestinationCity(
+            flightData.destinationCity
+        );
 
-    await homePage.selectDestinationCity(
-        flightData.destinationCity
-    );
+        await homePage.findFlights();
 
-    await homePage.findFlights();
 
-    // 3. Validate available flights
+        // ==========================================
+        // 3. Verify Reserve Page
+        // ==========================================
 
-    await expect(page).toHaveURL(/reserve\.php/);
+        await expect(page).toHaveURL(
+            /reserve\.php/
+        );
 
-    const flightCount =
-        await reservePage.getFlightCount();
+        const flightCount =
+            await reservePage.getFlightCount();
 
-    expect(flightCount).toBeGreaterThan(0);
+        expect(flightCount).toBeGreaterThan(0);
 
-    // 4. Choose Flight
 
-    await reservePage.chooseFlight(0);
+        // ==========================================
+        // 4. Choose Flight
+        // ==========================================
 
-    // 5. Purchase Flight
+        await reservePage.chooseFlight(0);
 
-    await expect(page).toHaveURL(/purchase\.php/);
 
-    await purchasePage.fillPassengerDetails();
+        // ==========================================
+        // 5. Verify Purchase Page
+        // ==========================================
 
-    await purchasePage.purchaseFlight();
+        await expect(page).toHaveURL(
+            /purchase\.php/
+        );
 
-    // 6. Confirmation
 
-    await expect(page).toHaveURL(/confirmation\.php/);
+        // ==========================================
+        // 6. Passenger Details
+        // ==========================================
 
-    // 7. Validate final message
+        await purchasePage.fillPassengerDetails(
+            flightData.passenger
+        );
 
-    await confirmationPage.verifyConfirmationMessage();
 
-    await expect(
-        confirmationPage.thankYouMessage
-    ).toHaveText(
-        'Thank you for your purchase today!'
-    );
-});
+        // ==========================================
+        // 7. Payment Details
+        // ==========================================
+
+        await purchasePage.fillPaymentDetails(
+            flightData.payment
+        );
+
+
+        // ==========================================
+        // 8. Purchase
+        // ==========================================
+
+        await purchasePage.purchaseFlight();
+
+
+        // ==========================================
+        // 9. Confirmation
+        // ==========================================
+
+        await expect(page).toHaveURL(
+            /confirmation\.php/
+        );
+
+
+        // ==========================================
+        // 10. Verify Thank You Message
+        // ==========================================
+
+        await confirmationPage
+            .verifyThankYouMessage();
+
+        await expect(
+            confirmationPage.thankYouMessage
+        ).toHaveText(
+            'Thank you for your purchase today!'
+        );
+    }
+);

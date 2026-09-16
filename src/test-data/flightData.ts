@@ -1,4 +1,6 @@
-export const flightData = {
+import { FlightData } from '../types/flightTypes';
+
+export const flightData: FlightData = {
 
     departureCity: 'Boston',
 
@@ -12,11 +14,11 @@ export const flightData = {
         zipCode: '380001'
     },
 
-    card: {
-        type: 'visa',
-        number: '4111111111111111',
-        month: '12',
-        year: '2030',
+    payment: {
+        cardType: 'visa',
+        cardNumber: '4111111111111111',
+        cardMonth: '12',
+        cardYear: '2030',
         nameOnCard: 'Mohammad Ajij'
     }
 };

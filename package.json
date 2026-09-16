@@ -9,6 +9,10 @@
     "test:ui": "playwright test --ui",
     "test:smoke": "playwright test tests/smoke",
     "test:regression": "playwright test tests/regression",
+    "test:chromium": "playwright test --project=chromium",
+    "test:dev": "set TEST_ENV=dev && playwright test",
+    "test:qa": "set TEST_ENV=qa && playwright test",
+    "test:staging": "set TEST_ENV=staging && playwright test",
     "test:debug": "playwright test --debug",
     "report": "playwright show-report",
     "typecheck": "tsc -p tsconfig.json --noEmit"
@@ -18,5 +22,8 @@
   "devDependencies": {
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.4.0"
+  },
+  "dependencies": {
+    "typescript": "^7.0.2"
   }
 }
