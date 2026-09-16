@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { config } from './src/config/environment';
 
 export default defineConfig({
   testDir: './tests',
@@ -17,7 +18,7 @@ export default defineConfig({
   ],
 
   use: {
-    baseURL: 'https://www.blazedemo.com',
+    baseURL: config.baseURL,
 
     headless: true,
 
@@ -29,7 +30,7 @@ export default defineConfig({
 
     actionTimeout: 15000,
 
-    navigationTimeout: 40000
+    navigationTimeout: 30000
   },
 
   projects: [

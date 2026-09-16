@@ -1,4 +1,5 @@
 import { Page, Locator } from '@playwright/test';
+import { PassengerData, PaymentData } from '../types/flightTypes';
 
 export class PurchasePage {
 
@@ -40,35 +41,42 @@ export class PurchasePage {
         });
     }
 
-   async fillPassengerDetails() {
+async fillPassengerDetails(data: PassengerData) {
 
-        await this.name.fill('Mohammad Ajij');
+    await this.name.fill(data.name);
 
-        await this.address.fill('Ahmedabad');
+    await this.address.fill(data.address);
 
-        await this.city.fill('Ahmedabad');
+    await this.city.fill(data.city);
 
-        await this.state.fill('Gujarat');
+    await this.state.fill(data.state);
 
-        await this.zipCode.fill('380001');
-    }
+    await this.zipCode.fill(data.zipCode);
 
-    async fillPaymentDetails() {
+}
 
-        await this.cardType.selectOption('visa');
+async fillPaymentDetails(data: PaymentData) {
 
-        await this.creditCardNumber.fill(
-            '4111111111111111'
-        );
+    await this.cardType.selectOption(
+        data.cardType
+    );
 
-        await this.creditCardMonth.fill('12');
+    await this.creditCardNumber.fill(
+        data.cardNumber
+    );
 
-        await this.creditCardYear.fill('2030');
+    await this.creditCardMonth.fill(
+        data.cardMonth
+    );
 
-        await this.nameOnCard.fill(
-            'Mohammad Ajij'
-        );
-    }
+    await this.creditCardYear.fill(
+        data.cardYear
+    );
+
+    await this.nameOnCard.fill(
+        data.nameOnCard
+    );
+}
 
     async purchaseFlight() {
 

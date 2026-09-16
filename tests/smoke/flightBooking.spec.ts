@@ -1,26 +1,21 @@
-import { test, expect } from '@playwright/test';
+import {
+    test,
+    expect
+} from '../../src/fixtures/testFixtures';
 
-import { HomePage } from '../../src/pages/HomePage';
-import { ReservePage } from '../../src/pages/ReservePage';
-import { PurchasePage } from '../../src/pages/PurchasePage';
-import { ConfirmationPage } from '../../src/pages/ConfirmationPage';
+import {
+    flightData
+} from '../../src/test-data/flightData';
 
 test(
     'E2E Flight Booking - Boston to London',
-    async ({ page }) => {
-
-        const homePage =
-            new HomePage(page);
-
-        const reservePage =
-            new ReservePage(page);
-
-        const purchasePage =
-            new PurchasePage(page);
-
-        const confirmationPage =
-            new ConfirmationPage(page);
-
+    async ({
+        page,
+        homePage,
+        reservePage,
+        purchasePage,
+        confirmationPage
+    }) => {
 
         // ==========================================
         // 1. Open Home Page
@@ -30,15 +25,15 @@ test(
 
 
         // ==========================================
-        // 2. Find Flights
+        // 2. Select Flight
         // ==========================================
 
         await homePage.selectDepartureCity(
-            'Boston'
+            flightData.departureCity
         );
 
         await homePage.selectDestinationCity(
-            'London'
+            flightData.destinationCity
         );
 
         await homePage.findFlights();
@@ -75,28 +70,32 @@ test(
 
 
         // ==========================================
-        // 6. Fill Passenger Details
+        // 6. Passenger Details
         // ==========================================
 
-        await purchasePage.fillPassengerDetails();
-
-
-        // ==========================================
-        // 7. Fill Payment Details
-        // ==========================================
-
-        await purchasePage.fillPaymentDetails();
+        await purchasePage.fillPassengerDetails(
+            flightData.passenger
+        );
 
 
         // ==========================================
-        // 8. Purchase Flight
+        // 7. Payment Details
+        // ==========================================
+
+        await purchasePage.fillPaymentDetails(
+            flightData.payment
+        );
+
+
+        // ==========================================
+        // 8. Purchase
         // ==========================================
 
         await purchasePage.purchaseFlight();
 
 
         // ==========================================
-        // 9. Verify Confirmation Page
+        // 9. Confirmation
         // ==========================================
 
         await expect(page).toHaveURL(
@@ -108,13 +107,13 @@ test(
         // 10. Verify Thank You Message
         // ==========================================
 
-        await confirmationPage.verifyThankYouMessage();
+        await confirmationPage
+            .verifyThankYouMessage();
 
         await expect(
             confirmationPage.thankYouMessage
         ).toHaveText(
             'Thank you for your purchase today!'
         );
-
     }
 );
